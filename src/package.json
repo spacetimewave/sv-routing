@@ -1,0 +1,32 @@
+{
+    "name": "svelte-routing",
+    "version": "0.0.0",
+    "author": "Spacetimeave",
+    "license": "MIT",
+    "description": "A declarative Svelte routing library",
+    "keywords": [
+        "svelte routing",
+        "svelte",
+        "sveltejs",
+        "route",
+        "router",
+        "routing",
+        "svelte route",
+        "svelte router",
+        "typescript"
+    ],
+    "repository": "spacetimewave/sv-routing",
+    "main": "./src/index.js",
+    "types": "./types/index.d.ts",
+    "svelte": "./src/index.js",
+    "exports": {
+        ".": {
+            "main": "./src/index.js",
+            "types": "./types/index.d.ts",
+            "svelte": "./src/index.js"
+        }
+    },
+    "devDependencies": {
+        "svelte": "^5.0.0"
+    }
+}

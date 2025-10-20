@@ -11,8 +11,8 @@
 
 Changes: 
 
-- Provide Svelte5 syntax support to ```sv-routing``` (@javierhersan #XXXXX)
-- Playground for ```sv-routing``` contributors & developers (@javierhersan #XXXXX)
+- Provide Svelte5 syntax support to ```sv-routing``` (@javierhersan #1)
+- Playground for ```sv-routing``` contributors & developers (@javierhersan #1)
 
 ---
 

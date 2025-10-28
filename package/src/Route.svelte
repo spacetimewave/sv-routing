@@ -3,7 +3,7 @@
     import { ROUTER } from "./contexts.js";
     import { canUseDOM } from "./utils.js";
 
-    let { path = "", component = null, ...rest } = $props();
+    let { path = "", component = null, children, ...rest } = $props();
 
     let routeParams = $state({});
     let routeProps = $state({});
@@ -47,6 +47,6 @@
             <ResolvedComponent {...routeParams} {...routeProps} />
         {/await}
     {:else}
-        <slot params={routeParams} />
+        {@render children({ params: routeParams })}
     {/if}
 {/if}

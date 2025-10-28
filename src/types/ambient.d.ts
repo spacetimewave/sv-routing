@@ -1,4 +1,4 @@
-declare module "svelte-routing/src/history" {
+declare module "sv-routing/src/history" {
     const getLocation: (
         source: typeof window
     ) => Location & { state: any; key: string };

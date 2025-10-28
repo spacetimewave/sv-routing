@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { Router, Link, Route } from "../../src";
+    import { Router, Link, Route } from "../../package";
     import Home from "./pages/Home.svelte";
     import About from "./pages/About.svelte";
     import Blog from "./pages/Blog.svelte";

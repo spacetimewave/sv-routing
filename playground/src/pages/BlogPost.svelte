@@ -1,7 +1,5 @@
 <script lang="ts">
     let { id, ...rest } = $props();
-    console.log(id);
-    console.log(rest);
 </script>
 
 <main>

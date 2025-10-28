@@ -1,4 +1,3 @@
-<!-- @migration-task Error while migrating Svelte code: Cannot use `$$props` in runes mode -->
 <script>
     import { getContext, onDestroy } from "svelte";
     import { ROUTER } from "./contexts.js";
@@ -44,12 +43,8 @@
 
 {#if $activeRoute && $activeRoute.route === route}
     {#if component}
-        {#await component then resolvedComponent}
-            <svelte:component
-                this={resolvedComponent?.default || resolvedComponent}
-                {...routeParams}
-                {...routeProps}
-            />
+        {#await component then ResolvedComponent}
+            <ResolvedComponent {...routeParams} {...routeProps} />
         {/await}
     {:else}
         <slot params={routeParams} />

@@ -135,7 +135,7 @@ in the `Link` component.
 
 ```html
 <script>
-    import { navigate } from "svelte-routing";
+    import { navigate } from "sv-routing";
 
     function onSubmit() {
         login().then(() => {
@@ -153,7 +153,7 @@ adding a new one and `preserveScroll` to not scroll the page to the top when cli
 
 ```html
 <script>
-    import { link } from "svelte-routing";
+    import { link } from "sv-routing";
 </script>
 
 <Router>
@@ -175,7 +175,7 @@ it to use the native browser action.
 ```html
 <!-- App.svelte -->
 <script>
-    import { links } from "svelte-routing";
+    import { links } from "sv-routing";
 </script>
 
 <div use:links>

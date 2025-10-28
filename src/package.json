@@ -5,7 +5,7 @@
     "license": "MIT",
     "description": "A declarative Svelte routing library",
     "scripts":{
-        "prepublishOnly": "cp ../README.md src/README.md"
+        "prepublishOnly": "cp ../README.md README.md"
     },
     "keywords": [
         "svelte routing",

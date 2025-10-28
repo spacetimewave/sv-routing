@@ -1,5 +1,5 @@
 import { navigate } from "./history.js";
-import { hostMatches, shouldNavigate } from "./utils.js";
+import { hostMatches, shouldNavigate } from "./utils.ts";
 
 /**
  * A link action that can be added to <a href=""> tags rather
@@ -10,7 +10,7 @@ import { hostMatches, shouldNavigate } from "./utils.js";
  * <a href="/post/{postId}" use:link>{post.title}</a>
  * ```
  */
-const link = (node) => {
+const link = (node: Element): { destroy(): void } => {
     const onClick = (event) => {
         const anchor = event.currentTarget;
 
@@ -52,7 +52,7 @@ const link = (node) => {
  * </div>
  * ```
  */
-const links = (node) => {
+const links = (node: Element): { destroy(): void } => {
     const findClosest = (tagName, el) => {
         while (el && el.tagName !== tagName) el = el.parentNode;
         return el;

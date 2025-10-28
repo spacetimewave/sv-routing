@@ -1,11 +1,11 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { getContext, onMount, setContext } from "svelte";
     import { derived, writable } from "svelte/store";
-    import { HISTORY, LOCATION, ROUTER } from "./contexts.js";
-    import { globalHistory } from "./history.js";
-    import { combinePaths, pick } from "./utils.js";
+    import { HISTORY, LOCATION, ROUTER } from "./contexts.ts";
+    import { globalHistory } from "./history.ts";
+    import { combinePaths, pick } from "./utils.ts";
 
     /** @type {{basepath?: string, url?: any, viewtransition?: any, history?: any, children?: import('svelte').Snippet<[any]>}} */
     let {
@@ -13,7 +13,7 @@
         url = null,
         viewtransition = null,
         history = globalHistory,
-        children
+        children,
     } = $props();
 
     const viewtransitionFn = (node, _, direction) => {
@@ -140,9 +140,15 @@
 {#if viewtransition}
     {#key $location.pathname}
         <div in:viewtransitionFn out:viewtransitionFn>
-            {@render children?.({ route: $activeRoute && $activeRoute.uri, location: $location, })}
+            {@render children?.({
+                route: $activeRoute && $activeRoute.uri,
+                location: $location,
+            })}
         </div>
     {/key}
 {:else}
-    {@render children?.({ route: $activeRoute && $activeRoute.uri, location: $location, })}
+    {@render children?.({
+        route: $activeRoute && $activeRoute.uri,
+        location: $location,
+    })}
 {/if}

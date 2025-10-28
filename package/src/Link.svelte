@@ -1,9 +1,9 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { createEventDispatcher, getContext } from "svelte";
-    import { HISTORY, LOCATION, ROUTER } from "./contexts.js";
-    import { resolve, shouldNavigate } from "./utils.js";
+    import { HISTORY, LOCATION, ROUTER } from "./contexts.ts";
+    import { resolve, shouldNavigate } from "./utils.ts";
 
     /** @type {{to?: string, replace?: boolean, stateInput?: any, getProps?: any, preserveScroll?: boolean, children?: import('svelte').Snippet<[any]>, [key: string]: any}} */
     let {
@@ -21,13 +21,18 @@
     const { navigate } = getContext(HISTORY);
     const dispatch = createEventDispatcher();
 
-    let href = $state(), isPartiallyCurrent = $state(), isCurrent = $state(), props = $derived(getProps({
-        location: $location,
-        href,
-        isPartiallyCurrent,
-        isCurrent,
-        existingProps: rest,
-    }));
+    let href = $state(),
+        isPartiallyCurrent = $state(),
+        isCurrent = $state(),
+        props = $derived(
+            getProps({
+                location: $location,
+                href,
+                isPartiallyCurrent,
+                isCurrent,
+                existingProps: rest,
+            })
+        );
     run(() => {
         href = resolve(to, $base.uri);
     });
@@ -38,7 +43,6 @@
         isCurrent = href === $location.pathname;
     });
     let ariaCurrent = $derived(isCurrent ? "page" : undefined);
-    
 
     const onClick = (event) => {
         dispatch("click", event);
@@ -47,17 +51,15 @@
             // Don't push another entry to the history stack when the user
             // clicks on a Link to the page they are currently on.
             const shouldReplace = $location.pathname === href || replace;
-            navigate(href, { stateInput, replace: shouldReplace, preserveScroll });
+            navigate(href, {
+                stateInput,
+                replace: shouldReplace,
+                preserveScroll,
+            });
         }
     };
 </script>
 
-<a
-    {href}
-    aria-current={ariaCurrent}
-    onclick={onClick}
-    {...props}
-    {...rest}
->
-    {@render children?.({ active: !!ariaCurrent, })}
+<a {href} aria-current={ariaCurrent} onclick={onClick} {...props} {...rest}>
+    {@render children?.({ active: !!ariaCurrent })}
 </a>

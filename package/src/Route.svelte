@@ -1,7 +1,7 @@
 <script>
     import { getContext, onDestroy } from "svelte";
-    import { ROUTER } from "./contexts.js";
-    import { canUseDOM } from "./utils.js";
+    import { ROUTER } from "./contexts.ts";
+    import { canUseDOM } from "./utils.ts";
 
     let { path = "", component = null, children, ...rest } = $props();
 

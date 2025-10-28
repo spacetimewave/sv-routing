@@ -16,13 +16,13 @@ const ROOT_POINTS = 1;
  * @param {string} uri
  * @return {string[]}
  */
-const segmentize = (uri) => uri.replace(/(^\/+|\/+$)/g, "").split("/");
+const segmentize = (uri:string) => uri.replace(/(^\/+|\/+$)/g, "").split("/");
 /**
  * Strip `str` of potential start and end `/`
  * @param {string} string
  * @return {string}
  */
-const stripSlashes = (string) => string.replace(/(^\/+|\/+$)/g, "");
+const stripSlashes = (string:string) => string.replace(/(^\/+|\/+$)/g, "");
 /**
  * Score a route depending on how its individual segments look
  * @param {object} route

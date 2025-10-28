@@ -4,15 +4,52 @@
  */
 import { canUseDOM } from "./utils";
 
-const getLocation = (source) => {
+type StackItem = { pathname: string; search: string };
+
+type HistoryState = {
+    key: string;
+    [key: string]: any;
+};
+
+type LocationWithState = Location & { state: any; key: string };
+
+type Listener = (params: {
+    location: LocationWithState;
+    action: "POP" | "PUSH";
+    preserveScroll?: boolean;
+}) => void;
+
+type NavigateOptions = {
+    state?: any;
+    replace?: boolean;
+    preserveScroll?: boolean;
+    blurActiveElement?: boolean;
+};
+
+type HistorySource = typeof window;
+
+type MemorySource = {
+    readonly location: StackItem;
+    addEventListener: (name: string, fn: Function) => void;
+    removeEventListener: (name: string, fn: Function) => void;
+    history: {
+        readonly entries: StackItem[];
+        readonly index: number;
+        readonly state: any;
+        pushState: (state: any, _: unknown, uri: string) => void;
+        replaceState: (state: any, _: unknown, uri: string) => void;
+    };
+};
+
+const getLocation = (source: HistorySource): LocationWithState => {
     return {
         ...source.location,
         state: source.history.state,
         key: (source.history.state && source.history.state.key) || "initial",
     };
 };
-const createHistory = (source) => {
-    const listeners = [];
+const createHistory = (source: HistorySource) => {
+    const listeners: Listener[] = [];
     let location = getLocation(source);
 
     return {
@@ -20,7 +57,7 @@ const createHistory = (source) => {
             return location;
         },
 
-        listen(listener) {
+        listen(listener: Listener) {
             listeners.push(listener);
 
             const popstateListener = () => {
@@ -37,7 +74,10 @@ const createHistory = (source) => {
             };
         },
 
-        navigate(to, { state, replace = false, preserveScroll = false, blurActiveElement = true } = {}) {
+        navigate(
+            to: string,
+            { state, replace = false, preserveScroll = false, blurActiveElement = true }: NavigateOptions = {}
+        ) {
             state = { ...state, key: Date.now() + "" };
             // try...catch iOS Safari limits to 100 pushState calls
             try {
@@ -50,15 +90,17 @@ const createHistory = (source) => {
             listeners.forEach((listener) =>
                 listener({ location, action: "PUSH", preserveScroll })
             );
-            if(blurActiveElement) document.activeElement.blur();
+            if (blurActiveElement && document.activeElement instanceof HTMLElement) {
+                document.activeElement.blur();
+            }
         },
     };
 };
 // Stores history entries in memory for testing or other platforms like Native
-const createMemorySource = (initialPathname = "/") => {
+const createMemorySource = (initialPathname: string = "/"): MemorySource => {
     let index = 0;
     const stack = [{ pathname: initialPathname, search: "" }];
-    const states = [];
+    const states: any[] = [];
 
     return {
         get location() {
@@ -93,7 +135,7 @@ const createMemorySource = (initialPathname = "/") => {
 // Global history uses window.history as the source if available,
 // otherwise a memory history
 const globalHistory = createHistory(
-    canUseDOM() ? window : createMemorySource()
+    canUseDOM() ? window : (createMemorySource() as any as HistorySource)
 );
 const { navigate } = globalHistory;
 

@@ -1,11 +1,12 @@
 {
     "name": "sv-routing",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "author": "Spacetimeave",
     "license": "MIT",
     "description": "A declarative Svelte routing library",
-    "scripts":{
-        "prepublishOnly": "cp ../README.md README.md"
+    "scripts": {
+        "prepublishOnly": "node -e \"require('fs').copyFileSync('../README.md', './README.md')\"",
+        "postpublish": "node -e \"require('fs').existsSync('./README.md') && require('fs').unlinkSync('./README.md')\""
     },
     "keywords": [
         "svelte routing",

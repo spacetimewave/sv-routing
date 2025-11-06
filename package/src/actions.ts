@@ -1,5 +1,5 @@
 import { navigate } from "./history.js";
-import { hostMatches, shouldNavigate } from "./utils.ts";
+import { hostMatches, shouldNavigate } from "./utils";
 
 /**
  * A link action that can be added to <a href=""> tags rather
@@ -10,9 +10,9 @@ import { hostMatches, shouldNavigate } from "./utils.ts";
  * <a href="/post/{postId}" use:link>{post.title}</a>
  * ```
  */
-const link = (node: Element): { destroy(): void } => {
-    const onClick = (event) => {
-        const anchor = event.currentTarget;
+const link = (node: HTMLElement): { destroy(): void } => {
+    const onClick = (event: MouseEvent) => {
+        const anchor = event.currentTarget as HTMLAnchorElement;
 
         if (
             (anchor.target === "" || anchor.target === "_self") &&
@@ -52,14 +52,18 @@ const link = (node: Element): { destroy(): void } => {
  * </div>
  * ```
  */
-const links = (node: Element): { destroy(): void } => {
-    const findClosest = (tagName, el) => {
-        while (el && el.tagName !== tagName) el = el.parentNode;
+const links = (node: HTMLElement): { destroy(): void } => {
+    const findClosest = (tagName: string, el:HTMLElement | null): HTMLElement | null  => {
+        while (el && el.tagName !== tagName) {
+            const parent = el.parentNode;
+            el = (parent instanceof HTMLElement) ? parent : null;
+        }
         return el;
     };
 
-    const onClick = (event) => {
-        const anchor = findClosest("A", event.target);
+    const onClick = (event: MouseEvent) => {
+        const target = event.target as HTMLElement | null;
+        const anchor = findClosest("A", target) as HTMLAnchorElement | null;
         if (
             anchor &&
             (anchor.target === "" || anchor.target === "_self") &&
@@ -75,11 +79,11 @@ const links = (node: Element): { destroy(): void } => {
         }
     };
 
-    node.addEventListener("click", onClick);
+    (node as HTMLElement).addEventListener("click", onClick);
 
     return {
         destroy() {
-            node.removeEventListener("click", onClick);
+            (node as HTMLElement).removeEventListener("click", onClick);
         },
     };
 };

@@ -3,6 +3,27 @@
  * https://github.com/reach/router/blob/master/LICENSE
  */
 
+/**
+ * @typedef {object} Route
+ * @property {string} path
+ * @property {boolean} default
+ * @property {number} value
+ */
+interface Route {
+  path: string;
+  default: boolean;
+  value: number;
+}
+
+/**
+ * @typedef {Route[]} Routes
+ */
+type Routes = Route[];
+
+/**
+ * Regular expression to detect dynamic segments in a route
+ * @type {RegExp}
+ */
 const PARAM = /^:(.+)/;
 const SEGMENT_POINTS = 4;
 const STATIC_POINTS = 3;
@@ -29,7 +50,7 @@ const stripSlashes = (string:string) => string.replace(/(^\/+|\/+$)/g, "");
  * @param {number} index
  * @return {object}
  */
-const rankRoute = (route, index) => {
+const rankRoute = (route: Route, index: number) => {
     const score = route.default
         ? 0
         : segmentize(route.path).reduce((score, segment) => {
@@ -56,12 +77,13 @@ const rankRoute = (route, index) => {
  * @param {object[]} routes
  * @return {object[]}
  */
-const rankRoutes = (routes) =>
+const rankRoutes = (routes: Routes) =>
     routes
         .map(rankRoute)
         .sort((a, b) =>
             a.score < b.score ? 1 : a.score > b.score ? -1 : a.index - b.index
         );
+
 /**
  * Ranks and picks the best route to match. Each segment gets the highest
  * amount of points, then the type of segment gets an additional amount of
@@ -84,7 +106,7 @@ const rankRoutes = (routes) =>
  * @param {string} uri
  * @return {?object}
  */
-const pick = (routes, uri) => {
+const pick = (routes: Routes, uri:string) => {
     let match;
     let default_;
 
@@ -107,7 +129,7 @@ const pick = (routes, uri) => {
         }
 
         const routeSegments = segmentize(route.path);
-        const params = {};
+        const params: { [key: string]: string } = {};
         const max = Math.max(uriSegments.length, routeSegments.length);
         let index = 0;
 
@@ -169,7 +191,7 @@ const pick = (routes, uri) => {
  * @param {string} [query]
  * @return {string}
  */
-const addQuery = (pathname, query) => pathname + (query ? `?${query}` : "");
+const addQuery = (pathname: string, query: string) => pathname + (query ? `?${query}` : "");
 /**
  * Resolve URIs as though every path is a directory, no files. Relative URIs
  * in the browser can feel awkward because not only can you be "in a directory",
@@ -198,7 +220,7 @@ const addQuery = (pathname, query) => pathname + (query ? `?${query}` : "");
  * @param {string} base
  * @return {string}
  */
-const resolve = (to, base) => {
+const resolve = (to: string, base: string) => {
     // /foo/bar, /baz/qux => /foo/bar
     if (to.startsWith("/")) return to;
 
@@ -223,7 +245,7 @@ const resolve = (to, base) => {
     // ../../one, /a/b/c/d   => /a/b/one
     // .././one , /a/b/c/d   => /a/b/c/one
     const allSegments = baseSegments.concat(toSegments);
-    const segments = [];
+    const segments: string[] = [];
 
     allSegments.forEach((segment) => {
         if (segment === "..") segments.pop();
@@ -237,7 +259,7 @@ const resolve = (to, base) => {
  * @param {string} basepath
  * @param {string} path
  */
-const combinePaths = (basepath, path) =>
+const combinePaths = (basepath: string, path: string) =>
     `${stripSlashes(
         path === "/"
             ? basepath
@@ -247,13 +269,13 @@ const combinePaths = (basepath, path) =>
  * Decides whether a given `event` should result in a navigation or not.
  * @param {object} event
  */
-const shouldNavigate = (event) =>
+const shouldNavigate = (event: MouseEvent) =>
     !event.defaultPrevented &&
     event.button === 0 &&
     !(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 
 // svelte seems to kill anchor.host value in ie11, so fall back to checking href
-const hostMatches = (anchor) => {
+const hostMatches = (anchor: HTMLAnchorElement) => {
     const host = location.host;
     return (
         anchor.host === host ||

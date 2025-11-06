@@ -6,6 +6,7 @@
     "target": "ESNext",
     "types": ["svelte"],
     "skipLibCheck": true,
+    "noEmit": true, // Compilation is handled by Vite (not tsc)
     "allowImportingTsExtensions": true
   },
   "include": ["src/**/*"],
